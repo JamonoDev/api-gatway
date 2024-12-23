@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main  # Déclenche ce workflow uniquement lors d'un push sur la branche `main`
+      - master  # Déclenche ce workflow uniquement lors d'un push sur la branche `master`
 
 jobs:
   build:
