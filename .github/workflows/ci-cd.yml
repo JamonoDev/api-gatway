@@ -1,49 +1,44 @@
-name: Project Transport Interurbain Gateway Flow
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: project transport gateway flow
 
 on:
   push:
-    branches:
-      - "master"  # Déclenche ce workflow uniquement lors d'un push sur la branche `master`
+    branches: [ "master" ]
   pull_request:
-    branches:
-      - "master"  # Déclenche ce workflow lors d'une demande de tirage sur la branche `master`
+    branches: [ "master" ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Exécution sur Ubuntu
+
+    runs-on: ubuntu-latest
 
     steps:
-      # Checkout du code
       - uses: actions/checkout@v3
-
-      # Configurer JDK 17 pour le projet Java
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: maven  # Utilisation du cache Maven pour accélérer les exécutions futures
-
-      
-      # Vérifier que Docker Compose est installé
-      - name: Verify Docker Compose installation
-        run: docker compose up -d
-
-      # Construire le projet avec Maven pour créer le répertoire target
-      - name: Build with Maven
-        run: mvn clean install
-
-      # Démarrer les services via Docker Compose
+          cache: maven
       - name: Run docker-compose
         run: docker compose up -d
 
-      # Construire et pousser l'image Docker après la compilation
+      - name: Build with Maven
+        run: mvn clean install
+
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           image: jamonodev/transport-gateway-image
           tags: latest
           registry: docker.io
-          dockerfile: Dockerfile  # Chemin vers le fichier Dockerfile
-          username: ${{ secrets.DOCKER_USERNAME }}  # Nom d'utilisateur Docker Hub depuis les secrets
-          password: ${{ secrets.DOCKER_TOKEN }}  # Utilisation du token Docker Hub pour l'authentification
+          dockerfile: Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
