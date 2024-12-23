@@ -1,14 +1,4 @@
-# Utiliser l'image officielle de OpenJDK comme base
-FROM openjdk:17-jdk-slim
-
-# Répertoire de travail
-WORKDIR /app
-
-# Ajouter le fichier JAR de l'application (assurez-vous que le fichier JAR est généré avant)
-COPY target/api-gatway.jar /app/api-gatway.jar
-
-# Exposer le port
+FROM eclipse-temurin:17-jdk-alpine
 EXPOSE 8080
-
-# Exécuter le fichier JAR
-CMD ["java", "-jar", "api-gatway.jar"]
+ADD target/transport-gateway-image.jar transport-gateway-image.jar
+ENTRYPOINT ["java","-jar","/transport-gateway-image.jar"]
