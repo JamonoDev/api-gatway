@@ -27,7 +27,7 @@ jobs:
       
       # Vérifier que Docker Compose est installé
       - name: Verify Docker Compose installation
-        run: docker-compose up -d
+        run: docker compose up -d
 
       # Construire le projet avec Maven pour créer le répertoire target
       - name: Build with Maven
